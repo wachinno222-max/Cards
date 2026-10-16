@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opiyo Guido | Digital Card</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:24px 16px;background:radial-gradient(circle at 20% 0%,#14532d 0,#052e16 55%,#021a0d 100%);color:#f0fdf4}
+.card{width:100%;max-width:400px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:28px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);backdrop-filter:blur(10px);align-self:flex-start}
+.top{height:110px;background:linear-gradient(135deg,#22c55e,#facc15)}
+.avatar{width:128px;height:128px;border-radius:50%;margin:-64px auto 0;border:5px solid #052e16;background:#166534;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#fef9c3;overflow:hidden;position:relative}
+.avatar img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.body{padding:18px 24px 28px;text-align:center}
+h1{font-size:24px;letter-spacing:.2px}
+.title{margin-top:6px;color:#facc15;font-weight:600;font-size:15px}
+.company{margin-top:2px;font-size:14px;color:#bbf7d0}
+.loc{margin-top:8px;font-size:13px;color:#86efac}
+.bio{margin:16px 0 4px;font-size:14px;line-height:1.55;color:#dcfce7}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 8px;border-radius:14px;text-decoration:none;font-weight:600;font-size:14px;color:#052e16;background:#f0fdf4;border:0;cursor:pointer;font-family:inherit;transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn.wa{background:#22c55e}
+.save{grid-column:1/-1;background:linear-gradient(90deg,#facc15,#fde047);font-size:15px;padding:15px}
+.label{margin:26px 0 12px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#86efac}
+.social{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.chip{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;text-decoration:none;color:#f0fdf4;font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+.chip b{width:26px;height:26px;border-radius:50%;background:#facc15;color:#052e16;display:flex;align-items:center;justify-content:center;font-size:13px}
+.foot{margin-top:24px;font-size:11px;color:#4ade80;opacity:.8}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="top"></div>
+  <div class="avatar" id="avatar"><span id="initials"></span><img id="photo" alt="" onerror="this.remove()"></div>
+  <div class="body">
+    <h1 id="name"></h1>
+    <p class="title" id="title"></p>
+    <p class="company" id="company"></p>
+    <p class="loc" id="loc"></p>
+    <p class="bio" id="bio"></p>
+    <div class="actions" id="actions"></div>
+    <p class="label">Connect</p>
+    <div class="social" id="social"></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</main>
+<script>
+/* ===== EDIT ONLY THIS BLOCK FOR EACH CLIENT ===== */
+const C = {
+  name: "Opiyo Guido",
+  title: "Associate Partner",
+  company: "BinSense Group (U) Ltd",
+  location: "Gulu, Northern Uganda",
+  bio: "Advocate of the High Court of Uganda. Solicitor. Environmental advocate and youth leader.",
+  photo: "gudio.jpg",              /* put the client's photo in the same folder with this name */
+  phone: "+256771925067",          /* international format, no spaces */
+  whatsapp: "256771925067",        /* digits only, no + */
+  email: "guidoopiyo277@gmail.com.com",
+  website: "",                     /* e.g. https://binsense.com */
+  social: [                        /* leave a link empty ("") to hide it */
+    {label:"LinkedIn",  https://www.linkedin.com/in/opiyo-guido:""},
+   
+  ]
+};
+/* ================================================= */
+
+const $ = id => document.getElementById(id);
+document.title = C.name + " | Digital Card";
+$("name").textContent = C.name;
+$("title").textContent = C.title;
+$("company").textContent = C.company;
+$("loc").textContent = C.location ? "📍 " + C.location : "";
+$("bio").textContent = C.bio;
+$("foot").textContent = "Scan. Connect. Done.";
+$("initials").textContent = C.name.split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+$("photo").src = C.photo;
+
+const btns = [];
+if (C.phone)    btns.push(`<a class="btn" href="tel:${C.phone}">📞 Call</a>`);
+if (C.whatsapp) btns.push(`<a class="btn wa" href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">💬 WhatsApp</a>`);
+if (C.email)    btns.push(`<a class="btn" href="mailto:${C.email}">✉️ Email</a>`);
+if (C.website)  btns.push(`<a class="btn" href="${C.website}" target="_blank" rel="noopener">🌐 Website</a>`);
+btns.push(`<button class="btn save" onclick="saveContact()">⬇ Save to Contacts</button>`);
+$("actions").innerHTML = btns.join("");
+
+const links = C.social.filter(s => s.url);
+$("social").innerHTML = links.map(s =>
+  `<a class="chip" href="${s.url}" target="_blank" rel="noopener"><b>${s.label[0]}</b>${s.label}</a>`).join("");
+if (!links.length) document.querySelector(".label").remove();
+
+function saveContact(){
+  const v = ["BEGIN:VCARD","VERSION:3.0","FN:"+C.name,"ORG:"+C.company,"TITLE:"+C.title,
+    "TEL;TYPE=CELL:"+C.phone,"EMAIL:"+C.email,C.website?"URL:"+C.website:"",
+    C.location?"ADR;TYPE=WORK:;;"+C.location+";;;;":"","END:VCARD"].filter(Boolean).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([v],{type:"text/vcard"}));
+  a.download = C.name.replace(/\s+/g,"_") + ".vcf";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+</script>
+</body>
+</html>
